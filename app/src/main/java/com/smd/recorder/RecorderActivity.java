@@ -1,12 +1,15 @@
 package com.smd.recorder;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -16,7 +19,6 @@ import com.smd.recorder.util.DateUtil;
 import java.util.Calendar;
 
 public class RecorderActivity extends Activity implements View.OnClickListener {
-
     private ImageButton backToInfoButton;
     private RecorderInfo recorderInfo;
     private ImageButton playButton;
@@ -53,4 +55,6 @@ public class RecorderActivity extends Activity implements View.OnClickListener {
             playButton.setVisibility(View.VISIBLE);
         }
     }
+
+
 }

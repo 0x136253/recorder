@@ -56,6 +56,7 @@
                     android:layout_toLeftOf="@+id/settingRelative">
 
                     <ImageButton
+                        android:id="@+id/waveButton"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_centerInParent="true"
