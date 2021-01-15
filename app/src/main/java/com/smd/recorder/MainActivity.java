@@ -34,7 +34,7 @@ public class MainActivity extends FragmentActivity {
             public void onClick(View v) {
                 Intent intent=new Intent(MainActivity.this, InfoActivity.class);
                 RecorderInfo recorderInfo = new RecorderInfo(Calendar.getInstance());
-                recorderInfo.setMoodNum(1);
+                recorderInfo.setMoodNum(3);
                 intent.putExtra("date",recorderInfo);
                 startActivity(intent);
             }

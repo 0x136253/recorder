@@ -19,6 +19,8 @@ import android.widget.TextView;
 import com.smd.recorder.adapter.MoodPagerAdapter;
 import com.smd.recorder.bean.RecorderInfo;
 
+import java.util.Calendar;
+
 public class InfoActivity extends FragmentActivity implements ViewPager.OnPageChangeListener,View.OnClickListener{
     private static final String TAG = "InfoActivity";
     private TextView textDay;
@@ -59,10 +61,10 @@ public class InfoActivity extends FragmentActivity implements ViewPager.OnPageCh
             textDay.setText(recorderInfo.getDay().toString());
             textMonth.setText((recorderInfo.getMonth()+1)+"月");
             textWeek.setText(weekDay[recorderInfo.getWeek()-1]);
-            Drawable drawable= ContextCompat.getDrawable(getApplicationContext(),R.drawable.emotion1);
-            this.getWindow().setBackgroundDrawable(drawable);
+            setBacAndMoodName(recorderInfo.getMoodNum());
             MoodPagerAdapter moodPagerAdapter = new MoodPagerAdapter(getSupportFragmentManager());
             vp_info.setAdapter(moodPagerAdapter);
+            vp_info.setCurrentItem(recorderInfo.getMoodNum()-1);
             vp_info.addOnPageChangeListener(this);
         }
     }
@@ -74,10 +76,39 @@ public class InfoActivity extends FragmentActivity implements ViewPager.OnPageCh
 
     @Override
     public void onPageSelected(int position) {
+        Log.d("InfoActivity","postiton is "+position);
+        recorderInfo.setMoodNum(position+1);
+        setBacAndMoodName(recorderInfo.getMoodNum());
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId()!=R.id.forwardIcon){
+            return;
+        }
+        try {
+            recorderInfo.setTitle(String.valueOf(editTextTitle.getText()));
+            Log.d(TAG,recorderInfo.toString());
+            Intent intent=new Intent(InfoActivity.this, RecorderActivity.class);
+            intent.putExtra("date",recorderInfo);
+            startActivity(intent);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+
+    private void setBacAndMoodName(int position){
         Drawable drawable;
         String moodName;
-        recorderInfo.setMoodNum(position+1);
-        switch (recorderInfo.getMoodNum()){
+        switch (position){
             case 1:
                 drawable= ContextCompat.getDrawable(getApplicationContext(),R.drawable.emotion1);
                 moodName = (String) this.getResources().getText(R.string.emotionTitle1);
@@ -105,19 +136,5 @@ public class InfoActivity extends FragmentActivity implements ViewPager.OnPageCh
         this.getWindow().setBackgroundDrawable(drawable);
         textDesc.setText(moodName);
         recorderInfo.setMoodTitle(moodName);
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId()!=R.id.forwardIcon){
-            return;
-        }
-        recorderInfo.setTitle(String.valueOf(editTextTitle.getText()));
-        Log.d(TAG,recorderInfo.toString());
     }
 }

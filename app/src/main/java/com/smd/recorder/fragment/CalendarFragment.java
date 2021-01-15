@@ -75,7 +75,7 @@ public class CalendarFragment extends Fragment {
                 cal.set(Calendar.DAY_OF_MONTH,Integer.valueOf((String)tv_day.getText()));
                 Intent intent = new Intent(getActivity(), InfoActivity.class);
                 RecorderInfo recorderInfo = new RecorderInfo(cal);
-                recorderInfo.setMoodNum(1);
+                recorderInfo.setMoodNum(3);
                 intent.putExtra("date",recorderInfo);
                 startActivity(intent);
             }

@@ -1,5 +1,7 @@
 package com.smd.recorder.adapter;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -16,7 +18,8 @@ public class MoodPagerAdapter  extends FragmentStatePagerAdapter {
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        return MoodFragment.newInstance(position+1);
+        Log.d("MoodPagerAdapter","now position is "+position);
+        return MoodFragment.newInstance(position);
     }
 
     @Override
@@ -26,6 +29,6 @@ public class MoodPagerAdapter  extends FragmentStatePagerAdapter {
 
     // 获得指定月份的标题文本
     public CharSequence getPageTitle(int position) {
-        return new String("第"+position+1+ "种心情");
+        return new String("第"+position+ "种心情");
     }
 }

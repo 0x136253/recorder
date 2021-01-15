@@ -6,6 +6,7 @@
     <drawable name="emotion3">#FFEB3B</drawable>
     <drawable name="emotion4">#03A9F4</drawable>
     <drawable name="emotion5">#4CAF50</drawable>
+    <drawable name="recorderBac">#CDDC39</drawable>
     <string name="emotionTitle1">"今天是最糟糕的一天"</string>
     <string name="emotionTitle2">"这是糟糕的一天"</string>
     <string name="emotionTitle3">"这是正常的一天"</string>
