@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".InfoActivity">
+
+    <LinearLayout
+        android:id="@+id/topNav"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:id="@+id/backRelative"
+            android:layout_width="60dp"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/backIcon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/ic_back" />
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="right">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <RelativeLayout
+                    android:id="@+id/forwardRelative"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true">
+
+                    <ImageButton
+                        android:id="@+id/forwardIcon"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/ic_foward" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textDay"
+        android:layout_width="64dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="36dp"
+        android:gravity="center"
+        android:text="13"
+        android:textSize="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.409"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topNav" />
+
+    <TextView
+        android:id="@+id/textMonth"
+        android:layout_width="64dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="36dp"
+        android:gravity="center"
+        android:text="12月"
+        app:layout_constraintStart_toEndOf="@+id/textDay"
+        app:layout_constraintTop_toBottomOf="@+id/topNav" />
+
+    <TextView
+        android:id="@+id/textWeek"
+        android:layout_width="64dp"
+        android:layout_height="28dp"
+        android:gravity="center"
+        android:text="星期五"
+        app:layout_constraintStart_toEndOf="@+id/textDay"
+        app:layout_constraintTop_toBottomOf="@+id/textMonth" />
+
+
+    <TextView
+        android:id="@+id/textDesc"
+        android:layout_width="229dp"
+        android:layout_height="37dp"
+        android:layout_marginTop="44dp"
+        android:gravity="center"
+        android:text="@string/emotionTitle1"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textDay" />
+
+    <FrameLayout
+        android:id="@+id/moodframe"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="88dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textDesc">
+
+        <LinearLayout
+            android:id="@+id/ll_info_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center|top"
+            android:orientation="vertical">
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/vp_info"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </androidx.viewpager.widget.ViewPager>
+        </LinearLayout>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/textTitle"
+        android:layout_width="84dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="60dp"
+        android:gravity="center"
+        android:text="标题："
+        android:textSize="20dp"
+        app:layout_constraintEnd_toStartOf="@+id/editTextTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/moodframe" />
+
+    <EditText
+        android:id="@+id/editTextTitle"
+        android:layout_width="196dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="60dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="今天心情不错"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/moodframe" />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

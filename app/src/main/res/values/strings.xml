@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">recorder</string>
+    <drawable name="defaultBac">#3ABEE6</drawable>
+    <drawable name="emotion1">#E14B40</drawable>
+    <drawable name="emotion2">#FF9800</drawable>
+    <drawable name="emotion3">#FFEB3B</drawable>
+    <drawable name="emotion4">#03A9F4</drawable>
+    <drawable name="emotion5">#4CAF50</drawable>
+    <string name="emotionTitle1">"今天是最糟糕的一天"</string>
+    <string name="emotionTitle2">"这是糟糕的一天"</string>
+    <string name="emotionTitle3">"这是正常的一天"</string>
+    <string name="emotionTitle4">"今天真好"</string>
+    <string name="emotionTitle5">"今天是最好的一天"</string>
+</resources>
