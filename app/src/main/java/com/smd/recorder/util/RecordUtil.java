@@ -62,7 +62,7 @@ public class RecordUtil {
 //        Log.d(TAG, "onResume --");
 //    }
 
-    private void setBtnAudioRecord() {
+    public void setBtnAudioRecord() {
         // 获得缓冲区字节大小 采样频率，声道，文件位数
         int bufferSize = AudioRecord.getMinBufferSize(64000, AudioFormat.CHANNEL_IN_STEREO, AudioFormat.ENCODING_PCM_16BIT);
         // 设置音频格式
@@ -214,7 +214,7 @@ public class RecordUtil {
         }
     }
 
-    public void playBackNow() {
+    public void playBackNow(String path) {
         int length = 0;
 //        Log.d(TAG, " before mAudio track");
 
@@ -249,7 +249,7 @@ public class RecordUtil {
 //            Log.d(TAG, " get stream in");
 ////            fis = new FileInputStream(getSDPath()+"/20190525_035557voice.pcm");
 //            Log.d(TAG, "PALY - > " + mFileName);
-            fis = new FileInputStream(mFileName);
+            fis = new FileInputStream(path);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -290,7 +290,7 @@ public class RecordUtil {
     /**
      * write sound file
      */
-    private void writeAudioDataToFile(String path) {
+    public void writeAudioDataToFile(String path) {
         int bytesRecord = 0;
         String filePath = path + "/" + new SimpleDateFormat("yyyyMMdd_hhmmss").format(new Date()) + "voice.pcm";
 //        filePath = getCacheDir() + "/" + new SimpleDateFormat("yyyyMMdd_hhmmss").format(new Date()) + "voice.pcm";

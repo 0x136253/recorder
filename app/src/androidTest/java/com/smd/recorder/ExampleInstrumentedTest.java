@@ -5,6 +5,8 @@ import android.content.Context;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.smd.recorder.util.RecordUtil;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -21,6 +23,8 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        RecordUtil recordUtil = new RecordUtil();
+        recordUtil.playBackNow("/storage/emulated/0/Android/data/com.smd.recorder/cache/20210117_091227voice.pcm");
         assertEquals("com.smd.recorder", appContext.getPackageName());
     }
 }
