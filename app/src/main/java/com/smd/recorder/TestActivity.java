@@ -2,6 +2,7 @@ package com.smd.recorder;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.media.AudioAttributes;
 import android.media.AudioFormat;
 import android.media.AudioManager;
@@ -27,16 +28,8 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class TestActivity extends AppCompatActivity {
-
+public class TestActivity extends Activity {
     private static final String TAG = "TestActivity";
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test);
-        initAudioRecordBtn();
-    }
-
     //Mic audio record function
     private static final int PLAY_END = 1;
     private static final int RECORD_END = 2;
@@ -53,6 +46,82 @@ public class TestActivity extends AppCompatActivity {
     private AudioTrack mAudio = null;
     private RecorderHandler mHandler;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_test);
+        initAudioRecordBtn();
+    }
+
+    private void initAudioRecordBtn() {
+        mRecordTimeTv = findViewById(R.id.mRecordTimeTv);
+        mStartRecordBtn = findViewById(R.id.mStartRecordBtn);
+        mPlayBtn = findViewById(R.id.mPlayBtn);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mHandler = new RecorderHandler();
+
+        Log.d(TAG, "start --");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mAudioRecord == null) {
+            setBtnAudioRecord();
+        }
+        mPlayBtn.setEnabled(false);
+        setListener();
+        Log.d(TAG, "onResume --");
+    }
+
+    private void setBtnAudioRecord() {
+        // 获得缓冲区字节大小 采样频率，声道，文件位数
+        int bufferSize = AudioRecord.getMinBufferSize(64000, AudioFormat.CHANNEL_IN_STEREO, AudioFormat.ENCODING_PCM_16BIT);
+        // 设置音频格式
+        final AudioFormat audioFormat = new AudioFormat.Builder()
+                .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                .setSampleRate(64000)
+                .setChannelMask(AudioFormat.CHANNEL_IN_STEREO)
+                .build();
+        // 初始化 AudioRecord 其中MediaRecorder.AudioSource.MIC为音频源
+        mAudioRecord = new AudioRecord.Builder()
+                .setAudioSource(MediaRecorder.AudioSource.MIC)
+                .setBufferSizeInBytes(bufferSize)
+                .setAudioFormat(audioFormat)
+                .build();
+        Log.d(TAG, "record bufferSize=(" + bufferSize + ")");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "stop --");
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
+        if (mAudioRecord != null && mAudioRecord.getState() == AudioRecord.STATE_INITIALIZED) {
+            mAudioRecord.stop();
+            mAudioRecord.release();
+            mAudioRecord = null;
+        }
+        mStartRecordBtn.setText("开始录音");
+        mPlayBtn.setEnabled(true);
+        mIsRecording = false;
+        mRecordTimeTv.setText("");
+        if (mAudio != null) {
+            if (mAudio.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
+                mAudio.stop();
+            }
+            mAudio.release();
+            mAudio = null;
+        }
+    }
+
+    //响应message,根据message做相应的操作
     private class RecorderHandler extends Handler {
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -76,24 +145,25 @@ public class TestActivity extends AppCompatActivity {
         }
     }
 
+    //millisInFuture:倒计时的总时长,countDownInterval：每次的间隔时间  单位都是毫秒
     private CountDownTimer mTimer = new CountDownTimer(30 * 1000, 1000) {
+
+        //这个是每次间隔指定时间的回调，millisUntilFinished：剩余的时间，单位毫秒
+        //显示时间到界面
         @Override
         public void onTick(long millisUntilFinished) {
             long time = (30 * 1000 - millisUntilFinished) / 1000;
             mRecordTimeTv.setText(String.format("00:%s", time < 10 ? "0" + time : time));
         }
 
+        //这个是倒计时结束的回调
         @Override
         public void onFinish() {
             mHandler.sendEmptyMessage(RECORD_END);
         }
     };
 
-    private void initAudioRecordBtn() {
-        mRecordTimeTv = findViewById(R.id.mRecordTimeTv);
-        mStartRecordBtn = findViewById(R.id.mStartRecordBtn);
-        mPlayBtn = findViewById(R.id.mPlayBtn);
-    }
+
 
     public String getSDPath() {
         String path = null;
@@ -116,7 +186,7 @@ public class TestActivity extends AppCompatActivity {
                 if (mAudioRecord == null || mAudioRecord.getState() == AudioRecord.STATE_UNINITIALIZED) {
                     return;
                 }
-
+                //mIsRecording表示是否正在录音
                 if (!mIsRecording) {
                     mIsRecording = true;
                     mStartRecordBtn.setText("结束录音");
@@ -144,6 +214,8 @@ public class TestActivity extends AppCompatActivity {
                 // return;
                 //   String name = pcm2();
 
+                //mIsPlay表示是否正在播放
+                //正在播放
                 if (mIsPlay) {
                     stopPlayBack();
                     mPlayBtn.setText("播放录音");
@@ -247,71 +319,6 @@ public class TestActivity extends AppCompatActivity {
         }
     }
 
-
-    private void setBtnAudioRecord() {
-        int bufferSize = AudioRecord.getMinBufferSize(64000, AudioFormat.CHANNEL_IN_STEREO, AudioFormat.ENCODING_PCM_16BIT);
-        final AudioFormat audioFormat = new AudioFormat.Builder()
-                .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
-                .setSampleRate(64000)
-                .setChannelMask(AudioFormat.CHANNEL_IN_STEREO)
-                .build();
-
-        mAudioRecord = new AudioRecord.Builder()
-                .setAudioSource(MediaRecorder.AudioSource.MIC)
-                .setBufferSizeInBytes(bufferSize)
-                .setAudioFormat(audioFormat)
-                .build();
-        Log.d(TAG, "record bufferSize=(" + bufferSize + ")");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        mHandler = new RecorderHandler();
-
-        Log.d(TAG, "start --");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mAudioRecord == null) {
-            setBtnAudioRecord();
-        }
-        mPlayBtn.setEnabled(false);
-        setListener();
-        Log.d(TAG, "onResume --");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d(TAG, "stop --");
-
-        if (mTimer != null) {
-            mTimer.cancel();
-        }
-
-        if (mAudioRecord != null && mAudioRecord.getState() == AudioRecord.STATE_INITIALIZED) {
-            mAudioRecord.stop();
-            mAudioRecord.release();
-            mAudioRecord = null;
-        }
-
-        mStartRecordBtn.setText("开始录音");
-        mPlayBtn.setEnabled(true);
-        mIsRecording = false;
-        mRecordTimeTv.setText("");
-
-        if (mAudio != null) {
-            if (mAudio.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
-                mAudio.stop();
-            }
-            mAudio.release();
-            mAudio = null;
-        }
-    }
-
     /**
      * write sound file
      */
@@ -344,6 +351,8 @@ public class TestActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        //以上为关于录音文件的配置
+        //开始录音
         mAudioRecord.startRecording();
 
         while (mIsRecording) {

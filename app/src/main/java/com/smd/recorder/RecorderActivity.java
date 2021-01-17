@@ -22,7 +22,8 @@ public class RecorderActivity extends Activity implements View.OnClickListener {
     private ImageButton backToInfoButton;
     private RecorderInfo recorderInfo;
     private ImageButton playButton;
-    private ImageButton replayButton;
+    private ImageButton recordButton;
+    private ImageButton reRecordButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,8 +34,15 @@ public class RecorderActivity extends Activity implements View.OnClickListener {
         backToInfoButton.setOnClickListener(this);
         playButton  = findViewById(R.id.playButton);
         playButton.setOnClickListener(this);
-        replayButton  = findViewById(R.id.replayButton);
-        replayButton.setOnClickListener(this);
+        recordButton  = findViewById(R.id.recordButton);
+        recordButton.setOnClickListener(this);
+        reRecordButton  = findViewById(R.id.reRecordButton);
+        reRecordButton.setOnClickListener(this);
+        playButton.setEnabled(false);
+        recordButton.setVisibility(View.VISIBLE);
+        recordButton.setEnabled(true);
+        reRecordButton.setVisibility(View.GONE);
+        reRecordButton.setEnabled(false);
         Drawable drawable= ContextCompat.getDrawable(getApplicationContext(),R.drawable.recorderBac);
         this.getWindow().setBackgroundDrawable(drawable);
     }
@@ -46,13 +54,24 @@ public class RecorderActivity extends Activity implements View.OnClickListener {
             intent.putExtra("date",recorderInfo);
             startActivity(intent);
         }
-        if (v.getId() == R.id.playButton){
-            playButton.setVisibility(View.GONE);
-            replayButton.setVisibility(View.VISIBLE);
+
+        //TODO wait for complete
+        if (v.getId() == R.id.recordButton){
+            recordButton.setVisibility(View.GONE);
+            recordButton.setEnabled(false);
+            reRecordButton.setVisibility(View.VISIBLE);
+            reRecordButton.setEnabled(true);
+            //record
         }
-        if (v.getId() == R.id.replayButton){
-            replayButton.setVisibility(View.GONE);
-            playButton.setVisibility(View.VISIBLE);
+        if (v.getId() == R.id.reRecordButton){
+            reRecordButton.setVisibility(View.GONE);
+            reRecordButton.setEnabled(false);
+            recordButton.setVisibility(View.VISIBLE);
+            recordButton.setEnabled(true);
+            //record
+        }
+        if (v.getId() == R.id.playButton){
+            //play()
         }
     }
 

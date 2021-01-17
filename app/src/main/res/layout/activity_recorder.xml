@@ -55,14 +55,54 @@
     </LinearLayout>
 
 
+    <TextView
+        android:id="@+id/mRecordTimeTv"
+        android:layout_width="157dp"
+        android:layout_height="60dp"
+        android:text="TextView"
+        android:gravity="center"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
     <RelativeLayout
-        android:id="@+id/buttonRelative"
+        android:id="@+id/buttonRelative1"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginBottom="72dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.333"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/recordButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/ic_record"
+            android:visibility="visible" />
+
+        <ImageButton
+            android:id="@+id/reRecordButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/ic_replay"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/buttonRelative2"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="72dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageButton
@@ -70,15 +110,9 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerInParent="true"
-            android:visibility="visible"
-            android:background="@drawable/ic_play" />
-        <ImageButton
-            android:id="@+id/replayButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_centerInParent="true"
-            android:visibility="gone"
-            android:background="@drawable/ic_replay" />
+            android:background="@drawable/ic_play"
+            android:visibility="visible" />
     </RelativeLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
