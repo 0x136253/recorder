@@ -322,7 +322,6 @@ public class RecordUtil {
         //以上为关于录音文件的配置
         //开始录音
         mAudioRecord.startRecording();
-
         while (mIsRecording) {
             // gets the voice output from microphone to byte format
             bytesRecord = mAudioRecord.read(tempBuffer, 0, bufferSize);
@@ -434,4 +433,5 @@ public class RecordUtil {
     public void setmHandler(Handler mHandler) {
         this.mHandler = mHandler;
     }
+
 }

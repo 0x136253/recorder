@@ -31,6 +31,8 @@ public class MainActivity extends FragmentActivity {
     private ViewPager vp_calendar; // 声明一个翻页视图对象
     private ImageButton button_plus;
     private ImageButton button_wave;
+    private ImageButton settingButton;
+    private ImageButton searchButton;
     private int mSelectedYear = 2000; // 当前选中的年份
 
     @Override
@@ -39,6 +41,22 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         // 从布局文件中获取名叫vp_calendar的翻页视图
         vp_calendar = findViewById(R.id.vp_calendar);
+        searchButton = findViewById(R.id.SearchLogo);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this, SearchActivity.class);
+                startActivity(intent);
+            }
+        });
+        settingButton = findViewById(R.id.settingButton);
+        settingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this, SettingActivity.class);
+                startActivity(intent);
+            }
+        });
         button_plus = findViewById(R.id.plusIcon);
         button_wave = findViewById(R.id.waveButton);
         button_wave.setOnClickListener(new View.OnClickListener() {
