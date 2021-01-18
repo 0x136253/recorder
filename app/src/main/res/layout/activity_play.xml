@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PlayActivity">
+
+
+    <LinearLayout
+        android:id="@+id/topNav"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:layout_width="60dp"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/backToSearchButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/ic_back" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textDayInPlay"
+        android:layout_width="64dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="36dp"
+        android:gravity="center"
+        android:text="13"
+        android:textSize="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.409"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topNav" />
+
+    <TextView
+        android:id="@+id/textMonthInPlay"
+        android:layout_width="64dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="36dp"
+        android:gravity="center"
+        android:text="12月"
+        app:layout_constraintStart_toEndOf="@+id/textDayInPlay"
+        app:layout_constraintTop_toBottomOf="@+id/topNav" />
+
+    <TextView
+        android:id="@+id/textWeekInPlay"
+        android:layout_width="64dp"
+        android:layout_height="28dp"
+        android:gravity="center"
+        android:text="星期五"
+        app:layout_constraintStart_toEndOf="@+id/textDayInPlay"
+        app:layout_constraintTop_toBottomOf="@+id/textMonthInPlay" />
+
+
+    <TextView
+        android:id="@+id/textDescInPlay"
+        android:layout_width="229dp"
+        android:layout_height="37dp"
+        android:layout_marginTop="44dp"
+        android:gravity="center"
+        android:text="@string/emotionTitle1"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textDayInPlay" />
+
+    <ImageView
+        android:id="@+id/moodImageInPlay"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/ic_face1"
+        android:layout_marginTop="88dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textDescInPlay"/>
+
+    <TextView
+        android:id="@+id/textTitleInPlay"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginTop="60dp"
+        android:gravity="center"
+        android:text="标题："
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/moodImageInPlay" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="72dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/playButtonInPlay"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/ic_play"
+            android:visibility="visible" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/remindText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        app:layout_constraintBottom_toTopOf="@+id/relativeLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textTitleInPlay"
+        app:layout_constraintVertical_bias="1.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

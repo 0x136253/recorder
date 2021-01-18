@@ -71,6 +71,9 @@ public class SearchActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 RecorderInfo recorderInfo=recorderInfoList.get(position);
                 Toast.makeText(SearchActivity.this,recorderInfo.toString(),Toast.LENGTH_SHORT).show();
+                Intent intent=new Intent(SearchActivity.this, PlayActivity.class);
+                intent.putExtra("date",recorderInfo);
+                startActivity(intent);
             }
         });
     }

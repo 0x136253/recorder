@@ -11,7 +11,6 @@ import java.util.Date;
 @Entity(tableName = RecorderInfo.RECORDER_TABLE_NAME)
 public class RecorderInfo implements Serializable {
     public static final String RECORDER_TABLE_NAME = "recorderInfo" ;
-
     @PrimaryKey(autoGenerate = true)
     private Integer id;
     private Integer year;
