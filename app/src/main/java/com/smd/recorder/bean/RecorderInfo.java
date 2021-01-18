@@ -1,10 +1,19 @@
 package com.smd.recorder.bean;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
+
+@Entity(tableName = RecorderInfo.RECORDER_TABLE_NAME)
 public class RecorderInfo implements Serializable {
+    public static final String RECORDER_TABLE_NAME = "recorderInfo" ;
+
+    @PrimaryKey(autoGenerate = true)
+    private Integer id;
     private Integer year;
     private Integer month;
     private Integer day;
@@ -12,6 +21,7 @@ public class RecorderInfo implements Serializable {
     private Integer moodNum = 1;
     private String moodTitle;
     private String Title;
+    private String path;
 
     public RecorderInfo() {
     }
@@ -23,7 +33,8 @@ public class RecorderInfo implements Serializable {
         week = calendar.get(Calendar.DAY_OF_WEEK);
     }
 
-    public RecorderInfo(Integer year, Integer month, Integer day, Integer week, Integer moodNum, String moodTitle, String title) {
+    public RecorderInfo(Integer id, Integer year, Integer month, Integer day, Integer week, Integer moodNum, String moodTitle, String title, String path) {
+        this.id = id;
         this.year = year;
         this.month = month;
         this.day = day;
@@ -31,18 +42,37 @@ public class RecorderInfo implements Serializable {
         this.moodNum = moodNum;
         this.moodTitle = moodTitle;
         Title = title;
+        this.path = path;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     @Override
     public String toString() {
         return "RecorderInfo{" +
-                "year=" + year +
+                "id=" + id +
+                ", year=" + year +
                 ", month=" + month +
                 ", day=" + day +
                 ", week=" + week +
                 ", moodNum=" + moodNum +
                 ", moodTitle='" + moodTitle + '\'' +
                 ", Title='" + Title + '\'' +
+                ", path='" + path + '\'' +
                 '}';
     }
 

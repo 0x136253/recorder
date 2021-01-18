@@ -19,12 +19,15 @@ import android.widget.TextView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.room.Room;
 
 import com.smd.recorder.bean.RecorderInfo;
+import com.smd.recorder.database.RoomDemoDatabase;
 import com.smd.recorder.util.DateUtil;
 import com.smd.recorder.util.RecordUtil;
 
 import java.util.Calendar;
+import java.util.List;
 
 public class RecorderActivity extends Activity implements View.OnClickListener {
     private static final String TAG = "RecorderActivity";
@@ -38,6 +41,7 @@ public class RecorderActivity extends Activity implements View.OnClickListener {
     private RecordUtil recordUtil;
     private static final int PLAY_END = 1;
     private static final int RECORD_END = 2;
+    private RoomDemoDatabase roomDemoDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,8 +62,15 @@ public class RecorderActivity extends Activity implements View.OnClickListener {
         completeButton.setOnClickListener(this);
         Drawable drawable= ContextCompat.getDrawable(getApplicationContext(),R.drawable.recorderBac);
         this.getWindow().setBackgroundDrawable(drawable);
+        initDatabase();
     }
 
+
+    public void initDatabase(){
+        roomDemoDatabase = Room.databaseBuilder(this, RoomDemoDatabase.class, RoomDemoDatabase.DATABASE_NAME)
+                .allowMainThreadQueries()
+                .build();
+    }
 
     @Override
     public void onStart() {
@@ -126,9 +137,24 @@ public class RecorderActivity extends Activity implements View.OnClickListener {
             startPlay();
         }
         if (v.getId()==R.id.completeIcon){
-//            System.out.println(recorderInfo);
-            Log.d(TAG,recorderInfo.toString());
-            Log.d(TAG,""+recordUtil.getmFileName());
+            insertIntoDataBase();
+        }
+    }
+
+
+    public void insertIntoDataBase(){
+        List<RecorderInfo> recorderInfoList = roomDemoDatabase.recorderInfoDao().selectByDate(recorderInfo.getYear(),recorderInfo.getMonth(),recorderInfo.getDay());
+        if (recorderInfoList.size()!=0){
+            for (int i = 0;i<recorderInfoList.size();i++){
+                Log.d(TAG,"重复:"+recorderInfoList.get(i).toString());
+                roomDemoDatabase.recorderInfoDao().deleteByFaceId(recorderInfoList.get(i).getId());
+            }
+        }
+        recorderInfo.setPath(recordUtil.getmFileName());
+        roomDemoDatabase.recorderInfoDao().insertUser(recorderInfo);
+        List<RecorderInfo> testList = roomDemoDatabase.recorderInfoDao().selectAll();
+        for (int i=0;i<testList.size();i++){
+            Log.d(TAG,"Database have "+testList.get(i).toString());
         }
     }
 

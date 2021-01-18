@@ -1,6 +1,7 @@
 package com.smd.recorder;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.smd.recorder.adapter.RecordListAdapter;
 import com.smd.recorder.bean.RecorderInfo;
+import com.smd.recorder.database.RoomDemoDatabase;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,11 +30,13 @@ public class SearchActivity extends Activity {
     private Button seeAllButton;
     private ListView recordListView;
     private List<RecorderInfo> recorderInfoList;
+    private RoomDemoDatabase roomDemoDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        initDatabase();
         editSearchBar = findViewById(R.id.editSearchBar);
         searchBackToHomeButton = findViewById(R.id.SearchBackToHomeButton);
         searchBackToHomeButton.setOnClickListener(new View.OnClickListener() {
@@ -58,9 +62,7 @@ public class SearchActivity extends Activity {
                 Toast.makeText(SearchActivity.this,"搜索成功",Toast.LENGTH_SHORT).show();
             }
         });
-        recorderInfoList = new ArrayList<>();
-        recorderInfoList.add(new RecorderInfo(Calendar.getInstance()));
-        recorderInfoList.get(0).setMoodNum(3);
+        recorderInfoList = roomDemoDatabase.recorderInfoDao().selectAll();
         RecordListAdapter recordListAdapter = new RecordListAdapter(SearchActivity.this,R.layout.item_record,recorderInfoList);
         recordListView = findViewById(R.id.recordList);
         recordListView.setAdapter(recordListAdapter);
@@ -71,5 +73,11 @@ public class SearchActivity extends Activity {
                 Toast.makeText(SearchActivity.this,recorderInfo.toString(),Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void initDatabase(){
+        roomDemoDatabase = Room.databaseBuilder(this, RoomDemoDatabase.class, RoomDemoDatabase.DATABASE_NAME)
+                .allowMainThreadQueries()
+                .build();
     }
 }
