@@ -48,5 +48,7 @@ dependencies {
     testImplementation "androidx.room:room-testing:$room_version"
 
 
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+
 
 }
