@@ -44,7 +44,6 @@ public class RecordUtil {
 //    @Override
 //    public void onStart() {
 //        super.onStart();
-    //TODO
 //        mHandler = new TestActivity.RecorderHandler();
 //
 //        Log.d(TAG, "start --");
@@ -53,7 +52,6 @@ public class RecordUtil {
 //    @Override
 //    public void onResume() {
 //        super.onResume();
-    //TODO
 //        if (mAudioRecord == null) {
 //            setBtnAudioRecord();
 //        }

@@ -65,12 +65,10 @@ public class PlayActivity extends Activity {
             public void onClick(View v) {
                 if (recordUtil.ismIsPlay()) {
                     recordUtil.stopPlayBack();
-                    //TODO 播放停止;
                     remindText.setText("播放停止");
                     recordUtil.setmIsPlay(false);
                 } else {
                     recordUtil.setmIsPlay(true);
-                    //TODO 开始播放
                     remindText.setText("正在播放");
                     playButton.setEnabled(false);
                     new Thread() {

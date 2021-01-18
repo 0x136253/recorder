@@ -46,7 +46,7 @@ public class SettingActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String settingName=settingList.get(position);
                 Toast.makeText(SettingActivity.this,settingName, Toast.LENGTH_SHORT).show();
-                //TODO wait for 数据同步具体逻辑
+                //TODO wait for 数据同步,导出，备份具体逻辑
             }
         });
     }

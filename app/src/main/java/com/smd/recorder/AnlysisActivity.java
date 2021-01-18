@@ -31,6 +31,8 @@ public class AnlysisActivity extends Activity {
     private List<Entry> listLine=new ArrayList<>();          //实例化一个 List  用来保存你的数据
     private PieChart pie;
     private List<PieEntry> listPie;
+
+    //TODO 完善图表数据逻辑
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

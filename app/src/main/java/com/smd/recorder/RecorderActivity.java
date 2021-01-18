@@ -48,6 +48,7 @@ public class RecorderActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_recorder);
         Intent intent = getIntent();
         recorderInfo = (RecorderInfo) intent.getSerializableExtra("date");
+        //TODO 根据MoodNum修改背景
         mRecordTimeTv = findViewById(R.id.recordTimeTv);
         backToInfoButton  = findViewById(R.id.backToInfoIcon);
         backToInfoButton.setOnClickListener(this);
@@ -128,8 +129,6 @@ public class RecorderActivity extends Activity implements View.OnClickListener {
             intent.putExtra("date",recorderInfo);
             startActivity(intent);
         }
-
-        //TODO wait for complete
         if (v.getId() == R.id.recordButton){
             startRecord();
         }
@@ -188,13 +187,11 @@ public class RecorderActivity extends Activity implements View.OnClickListener {
         if (recordUtil.ismIsPlay()) {
             recordUtil.stopPlayBack();
 //            mPlayBtn.setText("播放录音");
-            //TODO 播放停止;
             mRecordTimeTv.setText("播放停止");
             recordButton.setEnabled(true);
             recordUtil.setmIsPlay(false);
         } else {
             recordUtil.setmIsPlay(true);
-            //TODO 开始播放
             mRecordTimeTv.setText("正在播放");
             playButton.setEnabled(false);
             new Thread() {
