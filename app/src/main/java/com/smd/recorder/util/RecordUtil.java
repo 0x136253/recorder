@@ -288,22 +288,24 @@ public class RecordUtil {
     /**
      * write sound file
      */
-    public void writeAudioDataToFile(String path) {
+    public void writeAudioDataToFile(String path,String name) {
         int bytesRecord = 0;
-        String filePath = path + "/" + new SimpleDateFormat("yyyyMMdd_hhmmss").format(new Date()) + "voice.pcm";
-//        filePath = getCacheDir() + "/" + new SimpleDateFormat("yyyyMMdd_hhmmss").format(new Date()) + "voice.pcm";
-        mFileName = filePath;
-        File file = new File(filePath);
-        if (file.exists()) {
-
-        } else {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        File exportDir = new File(path);
+        if (!exportDir.exists()){
+            exportDir.mkdirs();
         }
-
+        String filePath = name;
+//        String filePath = new SimpleDateFormat("yyyyMMdd").format(new Date()) + "voice.pcm";
+        mFileName = path+"/"+filePath;
+        File file = new File(exportDir,filePath);
+        if (file.exists()) {
+            file.delete();
+        }
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         int bufferSize = AudioRecord.getMinBufferSize(64000, AudioFormat.CHANNEL_IN_STEREO, AudioFormat.ENCODING_PCM_16BIT);
         //int bufferSize = AudioRecord.getMinBufferSize(128000, AudioFormat.CHANNEL_IN_STEREO,  AudioFormat.ENCODING_PCM_16BIT);
 //        Log.d(TAG, "record bufferSize=(" + bufferSize + ")");
@@ -311,7 +313,7 @@ public class RecordUtil {
         OutputStream os = null;
 
         try {
-            os = new FileOutputStream(filePath);
+            os = new FileOutputStream(mFileName);
 //            Log.d(TAG, "after recorder create file");
         } catch (FileNotFoundException e) {
             e.printStackTrace();

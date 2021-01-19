@@ -158,7 +158,7 @@ public class TestActivity extends Activity {
                         public void run() {
                             super.run();
                             mTimer.start();
-                            recordUtil.writeAudioDataToFile(getExternalCacheDir()+"");
+                            recordUtil.writeAudioDataToFile(getExternalCacheDir()+"","ssss.pcm");
                         }
                     }.start();
                 } else {

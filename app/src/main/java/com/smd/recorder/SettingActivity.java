@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.smd.recorder.adapter.SettingListAdapter;
+import com.smd.recorder.util.BackupTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,12 @@ public class SettingActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String settingName=settingList.get(position);
+                if (settingName.equals("数据备份")){
+                    new BackupTask(SettingActivity.this).execute("backupDatabase");
+                }
+                else if (settingName.equals("数据恢复")){
+                    new BackupTask(SettingActivity.this).execute("restroeDatabase");
+                }
                 Toast.makeText(SettingActivity.this,settingName, Toast.LENGTH_SHORT).show();
                 //TODO wait for 数据同步,导出，备份具体逻辑
             }

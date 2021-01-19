@@ -9,6 +9,7 @@ import android.media.AudioRecord;
 import android.media.AudioTrack;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -197,13 +198,25 @@ public class RecorderActivity extends Activity implements View.OnClickListener {
                 public void run() {
                     super.run();
                     mTimer.start();
-                    recordUtil.writeAudioDataToFile(getExternalCacheDir()+"");
+                    String files = recorderInfo.getYear().toString()+""+recorderInfo.getMonth().toString()+""+recorderInfo.getDay().toString()+"voice.pcm";
+                    recordUtil.writeAudioDataToFile(getApplicationContext().getExternalFilesDir(null)+"/record",files);
                 }
             }.start();
         } else {
             recordUtil.getmHandler().sendEmptyMessage(RECORD_END);
         }
     }
+
+
+    private boolean isExternalStorageWritable() {
+        return Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED;
+    }
+
+    private boolean isExternalStorageReadable() {
+        return Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED ||
+                Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED_READ_ONLY;
+    }
+
 
     public void startPlay(){
         //mIsPlay表示是否正在播放
