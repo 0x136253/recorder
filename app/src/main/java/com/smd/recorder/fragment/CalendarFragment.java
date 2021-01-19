@@ -67,12 +67,15 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
+                if (position<7){
+                    return;
+                }
                 CalendarGridAdapter adapter= (CalendarGridAdapter) parent.getAdapter();
                 Calendar cal=Calendar.getInstance();
                 TextView tv_day = view.findViewById(R.id.tv_day);
-                cal.set(Calendar.YEAR,adapter.getNowYear());
-                cal.set(Calendar.MONTH,adapter.getNowMonth()-1);
-                cal.set(Calendar.DAY_OF_MONTH,Integer.valueOf((String)tv_day.getText()));
+                cal.set(Calendar.YEAR,adapter.getYearNumber()[position]);
+                cal.set(Calendar.MONTH,adapter.getMonthNumber()[position]);
+                cal.set(Calendar.DAY_OF_MONTH,Integer.valueOf(adapter.getDayNumber()[position]));
                 Intent intent = new Intent(getActivity(), InfoActivity.class);
                 RecorderInfo recorderInfo = new RecorderInfo(cal);
                 recorderInfo.setMoodNum(3);

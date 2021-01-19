@@ -50,7 +50,8 @@ public class SearchActivity extends Activity {
         seeAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO wait for seeall
+                recorderInfoList = roomDemoDatabase.recorderInfoDao().selectAll();
+                update();
                 Toast.makeText(SearchActivity.this,"see all", Toast.LENGTH_SHORT).show();
             }
         });
@@ -58,13 +59,25 @@ public class SearchActivity extends Activity {
         confirmToSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO wait for 具体搜索逻辑
+                String key = "%"+editSearchBar.getText()+"%";
+                recorderInfoList = roomDemoDatabase.recorderInfoDao().selectByTitle(key);
+                update();
                 Toast.makeText(SearchActivity.this,"搜索成功",Toast.LENGTH_SHORT).show();
             }
         });
-        recorderInfoList = roomDemoDatabase.recorderInfoDao().selectAll();
-        RecordListAdapter recordListAdapter = new RecordListAdapter(SearchActivity.this,R.layout.item_record,recorderInfoList);
         recordListView = findViewById(R.id.recordList);
+//        recorderInfoList = roomDemoDatabase.recorderInfoDao().selectAll();
+//        update();
+    }
+
+    public void initDatabase(){
+        roomDemoDatabase = Room.databaseBuilder(this, RoomDemoDatabase.class, RoomDemoDatabase.DATABASE_NAME)
+                .allowMainThreadQueries()
+                .build();
+    }
+
+    private void update(){
+        RecordListAdapter recordListAdapter = new RecordListAdapter(SearchActivity.this,R.layout.item_record,recorderInfoList);
         recordListView.setAdapter(recordListAdapter);
         recordListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -76,11 +89,5 @@ public class SearchActivity extends Activity {
                 startActivity(intent);
             }
         });
-    }
-
-    public void initDatabase(){
-        roomDemoDatabase = Room.databaseBuilder(this, RoomDemoDatabase.class, RoomDemoDatabase.DATABASE_NAME)
-                .allowMainThreadQueries()
-                .build();
     }
 }

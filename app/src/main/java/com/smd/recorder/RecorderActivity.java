@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -42,13 +43,13 @@ public class RecorderActivity extends Activity implements View.OnClickListener {
     private static final int PLAY_END = 1;
     private static final int RECORD_END = 2;
     private RoomDemoDatabase roomDemoDatabase;
+    private Integer recordLenght;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recorder);
         Intent intent = getIntent();
         recorderInfo = (RecorderInfo) intent.getSerializableExtra("date");
-        //TODO 根据MoodNum修改背景
         mRecordTimeTv = findViewById(R.id.recordTimeTv);
         backToInfoButton  = findViewById(R.id.backToInfoIcon);
         backToInfoButton.setOnClickListener(this);
@@ -61,7 +62,26 @@ public class RecorderActivity extends Activity implements View.OnClickListener {
         recordButton.setEnabled(true);
         completeButton = findViewById(R.id.completeIcon);
         completeButton.setOnClickListener(this);
-        Drawable drawable= ContextCompat.getDrawable(getApplicationContext(),R.drawable.recorderBac);
+        Drawable drawable;
+        switch (recorderInfo.getMoodNum()){
+            case 1:
+                drawable= ContextCompat.getDrawable(getApplicationContext(),R.drawable.emotion1);
+                break;
+            case 2:
+                drawable= ContextCompat.getDrawable(getApplicationContext(),R.drawable.emotion2);
+                break;
+            case 3:
+                drawable= ContextCompat.getDrawable(getApplicationContext(),R.drawable.emotion3);
+                break;
+            case 4:
+                drawable= ContextCompat.getDrawable(getApplicationContext(),R.drawable.emotion4);
+                break;
+            case 5:
+                drawable= ContextCompat.getDrawable(getApplicationContext(),R.drawable.emotion5);
+                break;
+            default:
+                drawable= ContextCompat.getDrawable(getApplicationContext(),R.drawable.emotion1);
+        }
         this.getWindow().setBackgroundDrawable(drawable);
         initDatabase();
     }
@@ -137,6 +157,9 @@ public class RecorderActivity extends Activity implements View.OnClickListener {
         }
         if (v.getId()==R.id.completeIcon){
             insertIntoDataBase();
+            Toast.makeText(RecorderActivity.this,"存储完成", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(RecorderActivity.this,MainActivity.class);
+            startActivity(intent);
         }
     }
 
@@ -150,6 +173,7 @@ public class RecorderActivity extends Activity implements View.OnClickListener {
             }
         }
         recorderInfo.setPath(recordUtil.getmFileName());
+        recorderInfo.setLength(recordLenght);
         roomDemoDatabase.recorderInfoDao().insertUser(recorderInfo);
         List<RecorderInfo> testList = roomDemoDatabase.recorderInfoDao().selectAll();
         for (int i=0;i<testList.size();i++){
@@ -242,6 +266,7 @@ public class RecorderActivity extends Activity implements View.OnClickListener {
         @Override
         public void onTick(long millisUntilFinished) {
             long time = (600 * 1000 - millisUntilFinished) / 1000;
+            recordLenght = Integer.valueOf(time+"");
             long min = time / 60;
             time = time%60;
             mRecordTimeTv.setText(String.format("%s:%s", min < 10 ? "0" + min : min,time < 10 ? "0" + time : time));

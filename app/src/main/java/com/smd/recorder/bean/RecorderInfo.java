@@ -21,6 +21,7 @@ public class RecorderInfo implements Serializable {
     private String moodTitle;
     private String Title;
     private String path;
+    private Integer length;
 
     public RecorderInfo() {
     }
@@ -32,7 +33,7 @@ public class RecorderInfo implements Serializable {
         week = calendar.get(Calendar.DAY_OF_WEEK);
     }
 
-    public RecorderInfo(Integer id, Integer year, Integer month, Integer day, Integer week, Integer moodNum, String moodTitle, String title, String path) {
+    public RecorderInfo(Integer id, Integer year, Integer month, Integer day, Integer week, Integer moodNum, String moodTitle, String title, String path, Integer length) {
         this.id = id;
         this.year = year;
         this.month = month;
@@ -42,6 +43,15 @@ public class RecorderInfo implements Serializable {
         this.moodTitle = moodTitle;
         Title = title;
         this.path = path;
+        this.length = length;
+    }
+
+    public Integer getLength() {
+        return length;
+    }
+
+    public void setLength(Integer length) {
+        this.length = length;
     }
 
     public String getPath() {
@@ -72,6 +82,7 @@ public class RecorderInfo implements Serializable {
                 ", moodTitle='" + moodTitle + '\'' +
                 ", Title='" + Title + '\'' +
                 ", path='" + path + '\'' +
+                ", length=" + length +
                 '}';
     }
 

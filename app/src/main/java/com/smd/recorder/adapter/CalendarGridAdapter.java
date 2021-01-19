@@ -12,11 +12,13 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
+import androidx.room.Room;
 
 import com.smd.recorder.R;
 import com.smd.recorder.bean.CalendarTransfer;
 import com.smd.recorder.calendar.LunarCalendar;
 import com.smd.recorder.calendar.SpecialCalendar;
+import com.smd.recorder.database.RoomDemoDatabase;
 import com.smd.recorder.util.DateUtil;
 
 import java.util.ArrayList;
@@ -29,6 +31,9 @@ public class CalendarGridAdapter extends BaseAdapter {
     private int dayOfWeek = 0; // 具体某一天是星期几
     private int lastDaysOfMonth = 0; // 上一个月的总天数
     private String[] dayNumber = new String[49]; // 一个gridview中的日期存入此数组中
+    private Integer[] yearNumber = new Integer[49]; // 一个gridview中的日期存入此数组中
+    private Integer[] monthNumber = new Integer[49]; // 一个gridview中的日期存入此数组中
+    private boolean[] isRecord = new boolean[49];
     private ArrayList<CalendarTransfer> transArray = new ArrayList<CalendarTransfer>();
     private static String weekTitle[] = {"一", "二", "三", "四", "五", "六", "日"};
     private LunarCalendar lc;
@@ -36,6 +41,31 @@ public class CalendarGridAdapter extends BaseAdapter {
     private Integer nowYear;
     private Integer nowMonth;
     private Integer nowDay;
+    private RoomDemoDatabase roomDemoDatabase;
+
+    public String[] getDayNumber() {
+        return dayNumber;
+    }
+
+    public void setDayNumber(String[] dayNumber) {
+        this.dayNumber = dayNumber;
+    }
+
+    public Integer[] getYearNumber() {
+        return yearNumber;
+    }
+
+    public void setYearNumber(Integer[] yearNumber) {
+        this.yearNumber = yearNumber;
+    }
+
+    public Integer[] getMonthNumber() {
+        return monthNumber;
+    }
+
+    public void setMonthNumber(Integer[] monthNumber) {
+        this.monthNumber = monthNumber;
+    }
 
     public Integer getNowYear() {
         return nowYear;
@@ -62,6 +92,9 @@ public class CalendarGridAdapter extends BaseAdapter {
     }
 
     public CalendarGridAdapter(Context context, int year, int month, int day) {
+        roomDemoDatabase = Room.databaseBuilder(context, RoomDemoDatabase.class, RoomDemoDatabase.DATABASE_NAME)
+                .allowMainThreadQueries()
+                .build();
         mContext = context;
         nowYear =year;nowMonth=month;nowDay=day;
         lc = new LunarCalendar();
@@ -92,6 +125,17 @@ public class CalendarGridAdapter extends BaseAdapter {
                 int temp = lastDaysOfMonth - dayOfWeek + 1 - 7 + 1;
                 trans = lc.getSubDate(trans, year, month - 1, temp + i, weekday, false);
                 dayNumber[i] = (temp + i)+"";
+                if (month == 1){
+                    yearNumber[i] = year -1;
+                    monthNumber[i] = 11;
+                }else {
+                    yearNumber[i] = year;
+                    monthNumber[i] = month -2;
+                }
+                if (roomDemoDatabase.recorderInfoDao().countByDate(yearNumber[i],monthNumber[i],temp + i)>0){
+                    Log.d("CalendarGridAdapter","search "+yearNumber[i]+" "+monthNumber[i]+" "+temp + i+" ");
+                    isRecord[i] = true;
+                }
             } else if (i < daysOfMonth + dayOfWeek + 7 - 1) { // 本月
                 int day = i - dayOfWeek + 1 - 7 + 1;
                 trans = lc.getSubDate(trans, year, month, day, weekday, false);
@@ -99,6 +143,12 @@ public class CalendarGridAdapter extends BaseAdapter {
                 // 对于当前月才去标记当前日期
                 if (year == DateUtil.getNowYear() && month == DateUtil.getNowMonth() && day == DateUtil.getNowDay()) {
                     currentDay = i;
+                }
+                yearNumber[i] = year;
+                monthNumber[i] = month-1;
+                if (roomDemoDatabase.recorderInfoDao().countByDate(yearNumber[i],monthNumber[i],day)>0){
+                    Log.d("CalendarGridAdapter","search "+yearNumber[i]+" "+monthNumber[i]+" "+day+" ");
+                    isRecord[i] = true;
                 }
             } else { // 下一个月
                 int next_month = month + 1;
@@ -110,6 +160,17 @@ public class CalendarGridAdapter extends BaseAdapter {
                 trans = lc.getSubDate(trans, next_year, next_month, nextMonthDay, weekday, false);
                 dayNumber[i] = nextMonthDay + "";
                 nextMonthDay++;
+                if (month == 12){
+                    yearNumber[i] = year +1;
+                    monthNumber[i] = 0;
+                }else {
+                    yearNumber[i] = year;
+                    monthNumber[i] = month;
+                }
+                if (roomDemoDatabase.recorderInfoDao().countByDate(yearNumber[i],monthNumber[i],nextMonthDay-1)>0){
+                    Log.d("CalendarGridAdapter","search "+yearNumber[i]+" "+monthNumber[i]+" "+(nextMonthDay-1)+" ");
+                    isRecord[i] = true;
+                }
             }
             transArray.add(trans);
         }
@@ -156,7 +217,7 @@ public class CalendarGridAdapter extends BaseAdapter {
             holder.tv_day.setTextColor(Color.BLACK);
             Drawable drawable = ContextCompat.getDrawable(mContext,R.drawable.defaultBac);
             holder.tv_day.setBackground(drawable);
-        } else if (currentDay == position) {
+        } else if (isRecord[position]) {
             holder.tv_day.setBackgroundColor(Color.GREEN); // 设置当天的背景
         } else {
             Drawable drawable = ContextCompat.getDrawable(mContext,R.drawable.defaultBac);

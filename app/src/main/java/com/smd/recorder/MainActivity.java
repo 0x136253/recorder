@@ -88,7 +88,6 @@ public class MainActivity extends FragmentActivity {
         // 如果指定年份不是上次选中的年份，则需重新构建该年份的年历
         if (year != mSelectedYear) {
             // 构建一个指定年份的年历翻页适配器
-            //TODO 根据有否录制修改背景逻辑
             CalendarPagerAdapter adapter = new CalendarPagerAdapter(getSupportFragmentManager(), year);
             // 给vp_calendar设置年历翻页适配器
             vp_calendar.setAdapter(adapter);

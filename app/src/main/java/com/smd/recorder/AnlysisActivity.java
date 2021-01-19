@@ -1,10 +1,16 @@
 package com.smd.recorder;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.room.Room;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -21,8 +27,10 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.smd.recorder.database.RoomDemoDatabase;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class AnlysisActivity extends Activity {
@@ -30,23 +38,79 @@ public class AnlysisActivity extends Activity {
     private LineChart line;
     private List<Entry> listLine=new ArrayList<>();          //实例化一个 List  用来保存你的数据
     private PieChart pie;
-    private List<PieEntry> listPie;
+    private List<PieEntry> listPie=new ArrayList<>();
+    private List<Integer> monthXY = new ArrayList<>();
+    private TextView monthCountText;
+    private TextView yearCountText;
+    private TextView totalCountText;
+    private ImageButton backToHomeButtonInAnlysis;
 
-    //TODO 完善图表数据逻辑
+    private RoomDemoDatabase roomDemoDatabase;
+
+    private void initDate(){
+
+        Integer nowMonth = Calendar.getInstance().get(Calendar.MONTH);
+        Integer nowYear = Calendar.getInstance().get(Calendar.YEAR);
+        monthCountText.setText(roomDemoDatabase.recorderInfoDao().countByMonth(nowYear,nowMonth).toString());
+        yearCountText.setText(roomDemoDatabase.recorderInfoDao().countByYear(nowYear).toString());
+        totalCountText.setText(roomDemoDatabase.recorderInfoDao().count().toString());
+        for (int i=nowMonth-4;i<=nowMonth;i++){
+            int temp = (i+12)%12;
+            monthXY.add(temp);
+            listLine.add(new Entry(i-nowMonth+4,roomDemoDatabase.recorderInfoDao().countByMonth(nowYear,temp)));
+        }
+        for (int i=1;i<6;i++){
+            String temp;
+            switch (i){
+                case 1:
+                    temp = (String) this.getResources().getText(R.string.emotionTitle1);
+                    break;
+                case 2:
+                    temp = (String) this.getResources().getText(R.string.emotionTitle2);
+                    break;
+                case 3:
+                    temp = (String) this.getResources().getText(R.string.emotionTitle3);
+                    break;
+                case 4:
+                    temp = (String) this.getResources().getText(R.string.emotionTitle4);
+                    break;
+                case 5:
+                    temp = (String) this.getResources().getText(R.string.emotionTitle5);
+                    break;
+                default:
+                    temp="";
+                    break;
+            }
+            listPie.add(new PieEntry(roomDemoDatabase.recorderInfoDao().countByMoodNumAndYearMonth(i,nowYear,nowMonth),temp));
+        }
+    }
+
+    public void initDatabase(){
+        roomDemoDatabase = Room.databaseBuilder(this, RoomDemoDatabase.class, RoomDemoDatabase.DATABASE_NAME)
+                .allowMainThreadQueries()
+                .build();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_anlysis);
+        monthCountText = findViewById(R.id.monthCountText);
+        yearCountText = findViewById(R.id.yearCountText);
+        totalCountText = findViewById(R.id.totalCountText);
+        backToHomeButtonInAnlysis = findViewById(R.id.backToHomeButtonInAnlysis);
+        backToHomeButtonInAnlysis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AnlysisActivity.this,MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        initDatabase();
+        initDate();
         line = (LineChart) findViewById(R.id.line);
 
-//        list.add(new Entry(0,0));     //其中两个数字对应的分别是   X轴   Y轴
-        listLine.add(new Entry(0,7));     //其中两个数字对应的分别是   X轴   Y轴
-        listLine.add(new Entry(1,10));
-        listLine.add(new Entry(2,12));
-        listLine.add(new Entry(3,6));
-        listLine.add(new Entry(4,3));
-
-        LineDataSet lineDataSet=new LineDataSet(listLine,"语文");   //list是你这条线的数据  "语文" 是你对这条线的描述
+        LineDataSet lineDataSet=new LineDataSet(listLine,"数量");   //list是你这条线的数据  "语文" 是你对这条线的描述
         LineData lineData=new LineData(lineDataSet);
         line.setData(lineData);
 
@@ -76,10 +140,13 @@ public class AnlysisActivity extends Activity {
         xAxis.setValueFormatter(new IAxisValueFormatter() {   //X轴自定义坐标
             @Override
             public String getFormattedValue(float v, AxisBase axisBase) {
-                for (int a=0;a<11;a++){     //用个for循环方便
-                    if (a==v){
-                        return a+1+"月";
-                    }
+//                for (int a=0;a<11;a++){     //用个for循环方便
+//                    if (a==v){
+//                        return a+1+"月";
+//                    }
+//                }
+                if (v>=0 && v<=4){
+                    return (monthXY.get(Integer.valueOf((int)v))+1)+"月";
                 }
                 return "";//注意这里需要改成 ""
             }
@@ -153,14 +220,14 @@ public class AnlysisActivity extends Activity {
 
 
         pie = (PieChart) findViewById(R.id.pie);
-        listPie=new ArrayList<>();
-
-
-        listPie.add(new PieEntry(5,"今天是最糟糕的一天"));
-        listPie.add(new PieEntry(6,"这是糟糕的一天"));
-        listPie.add(new PieEntry(8,"这是正常的一天"));
-        listPie.add(new PieEntry(12,"今天真好"));
-        listPie.add(new PieEntry(3,"今天是最好的一天"));
+//        listPie=new ArrayList<>();
+//
+//
+//        listPie.add(new PieEntry(5,"今天是最糟糕的一天"));
+//        listPie.add(new PieEntry(6,"这是糟糕的一天"));
+//        listPie.add(new PieEntry(8,"这是正常的一天"));
+//        listPie.add(new PieEntry(12,"今天真好"));
+//        listPie.add(new PieEntry(3,"今天是最好的一天"));
 
         PieDataSet pieDataSet=new PieDataSet(listPie,"");
         PieData pieData=new PieData(pieDataSet);

@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -44,13 +45,33 @@ public class PlayActivity extends Activity {
         setContentView(R.layout.activity_play);
         Intent intent = getIntent();
         recorderInfo = (RecorderInfo) intent.getSerializableExtra("date");
+
+        remindText = findViewById(R.id.remindText);
+        mTimer = new CountDownTimer(recorderInfo.getLength() * 1000, 1000) {
+
+            //这个是每次间隔指定时间的回调，millisUntilFinished：剩余的时间，单位毫秒
+            //显示时间到界面
+            @Override
+            public void onTick(long millisUntilFinished) {
+                long time = millisUntilFinished / 1000;
+                long min = time / 60;
+                time = time%60;
+                remindText.setText(String.format("%s:%s", min < 10 ? "0" + min : min,time < 10 ? "0" + time : time));
+                Log.d("PlayActivity","play time remains "+time);
+            }
+
+            //这个是倒计时结束的回调
+            @Override
+            public void onFinish() {
+                recordUtil.getmHandler().sendEmptyMessage(PLAY_END);
+            }
+        };
         textDay = findViewById(R.id.textDayInPlay);
         textMonth = findViewById(R.id.textMonthInPlay);
         textWeek = findViewById(R.id.textWeekInPlay);
         textDesc = findViewById(R.id.textDescInPlay);
         moodImage = findViewById(R.id.moodImageInPlay);
         titleText = findViewById(R.id.textTitleInPlay);
-        remindText = findViewById(R.id.remindText);
         backButton = findViewById(R.id.backToSearchButton);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,17 +86,19 @@ public class PlayActivity extends Activity {
             public void onClick(View v) {
                 if (recordUtil.ismIsPlay()) {
                     recordUtil.stopPlayBack();
-                    remindText.setText("播放停止");
+//                    remindText.setText("播放停止");
                     recordUtil.setmIsPlay(false);
                 } else {
                     recordUtil.setmIsPlay(true);
-                    remindText.setText("正在播放");
+//                    remindText.setText("正在播放");
                     playButton.setEnabled(false);
                     new Thread() {
                         @Override
                         public void run() {
                             super.run();
+                            mTimer.start();
                             recordUtil.playBackNow(recorderInfo.getPath());
+
                         }
                     }.start();
                 }
@@ -93,11 +116,13 @@ public class PlayActivity extends Activity {
         }
     }
 
+
+
     private void initUI() {
         textDay.setText(recorderInfo.getDay().toString());
         textMonth.setText(recorderInfo.getMonth()+1+"月");
         textWeek.setText(weekDay[recorderInfo.getWeek()-1]);
-        titleText.setText("标题:"+recorderInfo.getMoodTitle());
+        titleText.setText("标题:"+recorderInfo.getTitle());
         Drawable drawable;
         Drawable face;
         String moodName;
@@ -143,7 +168,7 @@ public class PlayActivity extends Activity {
             switch (msg.what) {
                 case PLAY_END:
                     recordUtil.stopPlayBack();
-                    remindText.setText("播放结束");
+//                    remindText.setText("播放结束");
                     Log.d(TAG,"播放结束--------------");
                     playButton.setEnabled(true);
                     recordUtil.setmIsPlay(false);
@@ -153,4 +178,7 @@ public class PlayActivity extends Activity {
             }
         }
     }
+
+    //millisInFuture:倒计时的总时长,countDownInterval：每次的间隔时间  单位都是毫秒
+    private CountDownTimer mTimer;
 }

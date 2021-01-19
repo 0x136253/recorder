@@ -53,7 +53,7 @@ public class RecordListAdapter extends ArrayAdapter<RecorderInfo> {
         }
 
         // 获取控件实例，并调用set...方法使其显示出来
-        viewHolder.recordName.setText(recorderInfo.getYear()+"/"+recorderInfo.getMonth()+1+"/"+recorderInfo.getDay());
+        viewHolder.recordName.setText(recorderInfo.getYear()+"/"+(recorderInfo.getMonth()+1)+"/"+recorderInfo.getDay());
         Drawable drawable;
         switch(recorderInfo.getMoodNum()){
             case 1:
